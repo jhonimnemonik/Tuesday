@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Контакты - Tuesday.com{% endblock %}
+
+{% block content %}
+  <h2>Контакты</h2>
+  <p>Свяжитесь с нами, заполнив форму ниже:</p>
+
+<!-- action 'submit_contact_form'-->
+  <form action="#" method="POST">
+    <label for="name">Имя:</label><br>
+    <input type="text" id="name" name="name"><br>
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"><br>
+    <label for="message">Сообщение:</label><br>
+    <textarea id="message" name="message"></textarea><br>
+    <input type="submit" value="Отправить">
+  </form>
+
+  <h2>О нас</h2>
+  <p>Мы - команда профессионалов, стремящихся сделать ваше взаимодействие с нашим сервисом максимально удобным и эффективным.</p>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Мой профиль{% endblock %}
+{% block bluecolor %}id="bluser"{% endblock %}
+
+{% block content %}
+  <aside id="sidebar">
+    <h2>Профиль пользователя</h2>
+    <ul>
+      <li><a href="#">Настройки</a></li>
+      <li><a href="#">Список досок</a></li>
+      <li><a href="#">Личные данные</a></li>
+    </ul>
+  </aside>
+  <div class="board2">
+    <div class="profile">
+      <h2>Настройки</h2>
+      <p>Здесь вы можете настроить различные параметры вашего профиля и работы с сервисом.</p>
+    </div>
+    <div class="profile">
+      <h2>Список досок</h2>
+      <ul>
+        <li>Доска 1</li>
+        <li>Доска 2</li>
+        <li>Доска 3</li>
+      </ul>
+    </div>
+    <div class="profile">
+      <h2>Личные данные</h2>
+      <p>Здесь вы можете просмотреть и отредактировать ваши личные данные, такие как имя, адрес электронной почты и другие.</p>
+    </div>
+  </div>
+{% endblock %}
