@@ -3,12 +3,14 @@
 {% block title %}Вход - Tuesday.com{% endblock %}
 
 {% block content %}
-  <h2>Вход</h2>
-  <form action="{{ url_for('user_routes.login') }}" method="POST">
+<div class="about">
+  <h2 >Вход</h2>
+  <form action="#" method="POST">
     <label for="username">Имя пользователя:</label><br>
     <input type="text" id="username" name="username"><br>
     <label for="password">Пароль:</label><br>
     <input type="password" id="password" name="password"><br>
     <input type="submit" value="Войти">
   </form>
+</div>
 {% endblock %}

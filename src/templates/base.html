@@ -12,11 +12,9 @@
     <h1>Tuesday.com</h1>
     <nav>
       <ul>
-        <li><a {% if page == 'home' %}id="active"{% endif %} href="/">Главная</a></li>
-        <li><a {% if page == 'tasks' %}id="active"{% endif %} href="{{ url_for('user_routes.tasks') }}">Мои проекты</a></li>
-        <li><a {% if page == 'contact' %}id="active"{% endif %} href="{{ url_for('about_routes.contact') }}">Контакт</a></li>
-        <li><a {% if page == 'about' %}id="active"{% endif %} href="{{ url_for('about_routes.about') }}">О нас</a></li>
-        <li><a {% if page == 'profile' %}id="active"{% endif %} href="{{ url_for('user_routes.edit_profile') }}">Профиль</a></li>
+        {% for m in menu %}
+          <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}">{{m.name}}</a></li>
+        {% endfor %}
       </ul>
     </nav>
   </div>

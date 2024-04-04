@@ -1,17 +1,44 @@
 from flask import Flask
 from routes.routes import home_routes, about_routes, user_routes
+from flask_sqlalchemy import SQLAlchemy
 
+def create_app(config=None):
+    app = Flask(__name__)
+    if config:
+        app.config.from_object(config)
+    else:
+        app.config.from_object('config.config.Config')
+    db = SQLAlchemy(app)
 
-app = Flask(__name__)
-app.config.from_object('config.config.Config')
+    # from routes.routes import home_routes, about_routes, user_routes
 
-app.register_blueprint(home_routes)
-app.register_blueprint(user_routes)
-app.register_blueprint(about_routes)
+    app.register_blueprint(home_routes)
+    app.register_blueprint(user_routes)
+    app.register_blueprint(about_routes)
+
+    return app, db
 
 if __name__ == '__main__':
+    app, db = create_app()
     app.run(debug=True)
 
+
+
+######v2.0
+# app = Flask(__name__)
+# app.config.from_object('config.config.Config')
+#
+# app.register_blueprint(home_routes)
+# app.register_blueprint(user_routes)
+# app.register_blueprint(about_routes)
+#
+# if __name__ == '__main__':
+#     app.run(debug=True)
+
+
+
+
+######v1.0
 # from flask import Flask, render_template, url_for, request
 # # from src.controllers import home
 #
@@ -77,13 +104,12 @@ if __name__ == '__main__':
 #
 # @app.route('/add_column', methods=['POST'])
 # def add_column():
-#     # Получаем данные из запроса
 #     data = request.json
 #     column_name = data['column_name']
 #
-#     # Ваш код для добавления столбца в базу данных здесь
+#     #код для добавления в бд
 #
-#     # Возвращаем успешный ответ
+#     #ответ
 #     return '', 200
 #
 #

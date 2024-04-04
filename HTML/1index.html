@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Главная - Tuesday.com</title>
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}">
+</head>
+<body>
+<header>
+  <div class="header-container">
+    <h1>Tuesday.com</h1>
+    <nav>
+      <ul>
+<!--        class="profile"-->
+        <li><a id="active" href="#">Главная</a></li>
+        <li><a href="#">Мой профиль</a></li>
+        <li><a href="#">О нас</a></li>
+        <li><a href="#">Контакты</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="container">
+  <aside id="sidebar">
+    <h2>Доски <a class="custom-link add-task-link" title="Добавить новую доску" href="#"> + </a></h2>
+
+    <button id="toggleSidebar"><</button>
+    <ul>
+      <li><a href="#">Доска 1</a></li>
+      <li><a href="#">Доска 2</a></li>
+      <li><a href="#">Доска 3</a></li>
+    </ul>
+  </aside>
+  <div class="board">
+    <div class="column">
+      <h2><a onclick="toggleTable('plan1')" href="#">План</a></h2>
+      <a class="custom-link add-task-link" title="Добавить новую задачу" href="#"> + </a>
+      <table id="plan1">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Статус</th>
+            <th>Приоритет</th>
+            <th>Описание</th>
+            <th><a class="custom-link add-task-link" title="Добавить столбец" href="#"> + </a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Задача 1</td>
+            <td>В работе</td>
+            <td>--***</td>
+            <td>Нужно сделать!</td>
+          </tr>
+          <tr>
+            <td>Задача 2</td>
+            <td>В работе</td>
+            <td>*****</td>
+            <td>Очень нужно сделать!</td>
+          </tr>
+          <tr>
+            <td>Задача 3</td>
+            <td>В работе</td>
+            <td>----*</td>
+            <td>Можно наверное сделать!</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2><a onclick="toggleTable('plan1')" href="#">В работе</a></h2>
+      <a class="custom-link add-task-link" title="Добавить новую задачу" href="#"> + </a>
+      <table id="plan1">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Статус</th>
+            <th>Приоритет</th>
+            <th>Описание</th>
+            <th><a class="custom-link add-task-link" title="Добавить столбец" href="#"> + </a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Задача 1</td>
+            <td>В работе</td>
+            <td>--***</td>
+            <td>Нужно сделать!</td>
+          </tr>
+          <tr>
+            <td>Задача 2</td>
+            <td>Закончено</td>
+            <td>*****</td>
+            <td>Очень нужно сделать!</td>
+          </tr>
+          <tr>
+            <td>Задача 3</td>
+            <td>Не начато</td>
+            <td>----*</td>
+            <td>Можно наверное сделать!</td>
+          </tr>
+        </tbody>
+      </table>
+      <h2><a onclick="toggleTable('plan1')" href="#">Завершено</a></h2>
+      <a class="custom-link add-task-link" title="Добавить новую задачу" href="#"> + </a>
+      <table id="plan1">
+        <thead>
+          <tr>
+            <th>Название</th>
+            <th>Статус</th>
+            <th>Приоритет</th>
+            <th>Описание</th>
+            <th><a class="custom-link add-task-link" title="Добавить столбец" href="#"> + </a></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Задача 1</td>
+            <td>В работе</td>
+            <td>--***</td>
+            <td>Нужно сделать!</td>
+          </tr>
+          <tr>
+            <td>Задача 2</td>
+            <td>В работе</td>
+            <td>*****</td>
+            <td>Очень нужно сделать!</td>
+          </tr>
+          <tr>
+            <td>Задача 3</td>
+            <td>В работе</td>
+            <td>----*</td>
+            <td>Можно наверное сделать!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<footer>
+  <p>&copy; 2024 Tuesday.com</p>
+</footer>
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}">
+<script src="{{ url_for('static', filename='scripts/script.js')}}"></script>
+</body>
+</html>
