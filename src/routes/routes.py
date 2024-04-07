@@ -1,8 +1,12 @@
 from flask import Blueprint, render_template, request, jsonify
+from app import create_app as app
+from db.db import db
 
-from main import create_app
+home_routes = Blueprint('home_routes', __name__)
+about_routes = Blueprint('about_routes', __name__)
+user_routes = Blueprint('user_routes', __name__)
 
-_, db = create_app()
+
 
 menu = [
     {"name": "Главная", "url": "/", "page": "home"},
@@ -12,11 +16,6 @@ menu = [
     {"name": "Профиль", "url": "/profile/edit", "page": "profile_edit"}
 ]
     #{"name": "", "url": ""},
-
-
-home_routes = Blueprint('home_routes', __name__)
-about_routes = Blueprint('about_routes', __name__)
-user_routes = Blueprint('user_routes', __name__)
 
 @home_routes.route('/')
 def home():
@@ -32,7 +31,7 @@ def profile():#(id, path):
     return render_template('user/profile.html', menu=menu, page='profile')
 
 
-@user_routes.route('/profile/projects')
+@user_routes.route('/profile/projects')  #/desk/id/project
 def tasks():
     return render_template('user/projects.html', menu=menu, page="tasks")
 
@@ -42,12 +41,22 @@ def edit_profile():
 
 @about_routes.route('/contact')
 def contact():
+    name = request.form['name']
+    email = request.form['email']
+    message = request.form['message']
+    print(name,message,email)
     return render_template('about/contact.html', menu=menu, page='contact')
 
+# username = request.form['username']
+#     new_user = User(username=username)
+#     db.session.add(new_user)
+#     db.session.commit()
+#     return redirect(url_for('index'))
 
 @user_routes.route('/register', methods=['POST'])
 def register():
     if request.method == 'POST':
+        print(request.form)
         #сохранение данных пользователя в базу данных
         return render_template('base.html', menu=menu)#, content='Регистрация успешно завершена!')
     #не POST, возвращает страницу входа
@@ -80,3 +89,8 @@ def add_column():
     db.session.commit()
 
     return '', 200
+
+
+# app.register_blueprint(home_routes)
+# app.register_blueprint(user_routes)
+# app.register_blueprint(about_routes)

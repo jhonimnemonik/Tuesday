@@ -3,7 +3,7 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///app.db'
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///db/data.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECURITY_PASSWORD_SALT = 'your_password_salt_here'
     SECURITY_PASSWORD_HASH = 'bcrypt'
@@ -19,3 +19,5 @@ class Config:
         'target_version': ['py37'],
         'exclude': '/(migrations|\.git)/'
     }
+
+print(Config.SQLALCHEMY_DATABASE_URI)

@@ -1,26 +1,21 @@
 from flask import Flask
-from routes.routes import home_routes, about_routes, user_routes
 from flask_sqlalchemy import SQLAlchemy
 
-def create_app(config=None):
+def create_app():
+    from routes.routes import home_routes, about_routes, user_routes
     app = Flask(__name__)
-    if config:
-        app.config.from_object(config)
-    else:
-        app.config.from_object('config.config.Config')
-    db = SQLAlchemy(app)
-
-    # from routes.routes import home_routes, about_routes, user_routes
-
     app.register_blueprint(home_routes)
     app.register_blueprint(user_routes)
     app.register_blueprint(about_routes)
+    return app
 
-    return app, db
+
+
 
 if __name__ == '__main__':
     app, db = create_app()
     app.run(debug=True)
+
 
 
 
