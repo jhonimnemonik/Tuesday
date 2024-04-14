@@ -1,22 +1,42 @@
-{% extends 'base.html' %}
+{% extends 'base/base.html' %}
 
-{% block title %}Контакты - Tuesday.com{% endblock %}
+{% block title %}Контакты{% endblock %}
 
 {% block content %}
-  <h2>Контакты</h2>
-  <p>Свяжитесь с нами, заполнив форму ниже:</p>
-
-<!-- action 'submit_contact_form'-->
-  <form action="/contact" method="POST">
-    <label for="name">Имя:</label><br>
-    <input type="text" id="name" name="name"><br>
-    <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email"><br>
-    <label for="message">Сообщение:</label><br>
-    <textarea id="message" name="message"></textarea><br>
-    <input type="submit" value="Отправить">
-  </form>
-
-  <h2>О нас</h2>
-  <p>Мы - команда профессионалов, стремящихся сделать ваше взаимодействие с нашим сервисом максимально удобным и эффективным.</p>
+  <div class="container">
+    <div class="about-section about">
+      <h2>О нас</h2>
+      <p>Мы - команда профессионалов, стремящихся сделать ваше взаимодействие с нашим сервисом максимально удобным и эффективным.</p>
+    </div>
+    <div class="contact-section">
+      <div class="contact-info">
+      <h2>Контакты</h2>
+        <p>Телефон: <a href="tel:+123456789">+1 (234) 567-89</a></p>
+        <p>Электронная почта: <a href="mailto:email@email.com">email@email.com</a></p>
+        <p>Адрес: <a href="https://maps.google.com/?q=Pawia 5, 31-154 Kraków">Pawia 5, 31-154 Kraków</a></p>
+        <p>Часы работы: Пн-Пт, 9:00-18:00</p>
+      </div>
+    </div>
+    <div class="contact-form">
+      <h3>Свяжитесь с нами, заполнив форму ниже:</h3>
+        <form action="/contact" method="POST">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flashes">
+              {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+          <label for="name">Имя:</label><br>
+          <input type="text" id="name" name="name"><br>
+          <label for="email">Email:</label><br>
+          <input type="email" id="email" name="email"><br>
+          <label for="message">Сообщение:</label><br>
+          <textarea id="message" name="message"></textarea><br>
+          <input type="submit" value="Отправить">
+        </form>
+      </div>
+  </div>
 {% endblock %}

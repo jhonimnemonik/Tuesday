@@ -1,10 +1,17 @@
-{% extends 'base.html' %}
+{% extends 'base/base.html' %}
 
 {% block title %}Мой профиль{% endblock %}
 {% block bluecolor %}id="bluser"{% endblock %}
 
 {% block content %}
   <aside id="sidebar">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
     <h2>Профиль пользователя</h2>
     <ul>
       <li><a href="#">Настройки</a></li>
@@ -19,11 +26,17 @@
     </div>
     <div class="profile">
       <h2>Список досок</h2>
-      <ul>
-        <li>Доска 1</li>
-        <li>Доска 2</li>
-        <li>Доска 3</li>
-      </ul>
+      {% for board in user.boards %}
+        <div>
+          <h3>{{ board.name }}</h3>
+          <ul>
+            {% for task in board.tasks %}
+              <li>{{ task.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+
     </div>
     <div class="profile">
       <h2>Личные данные</h2>

@@ -5,26 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% block title %}{% endblock %} - Tuesday.com</title>
 <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}">
+<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico')}}">
 </head>
 <body>
 <header {% block bluecolor %}{% endblock %}>
   <div class="header-container">
-    <h1>Tuesday.com</h1>
-    <nav>
-      <ul>
-        {% for m in menu %}
-          <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}">{{m.name}}</a></li>
-        {% endfor %}
-      </ul>
-    </nav>
+    <h1><a href="{{ url_for('home_routes.home') }}" data-menu-link="/logout">Tuesday.com</a></h1>
+    <button class="menu-toggle">Меню</button>
+    {% include 'base/navigation.html' %}
   </div>
 </header>
-<div class="container">
+
   {% block content %}{% endblock %}
 </div>
-<footer>
-  <p>&copy; 2024 Tuesday.com</p>
-</footer>
-<script src="{{ url_for('static', filename='js/script.js')}}"></script>
-</body>
-</html>
+{% include 'base/footer.html' %}

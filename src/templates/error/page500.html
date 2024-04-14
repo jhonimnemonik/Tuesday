@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Страница не найдена{% endblock %}
+
+{% block content %}
+{{ super() }}
+<div class="center-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+<h3 >Ошибка обработки данных сервером. Вернуться на <a href="{{ url_for('home_routes.home') }}">главную</a> страницу.</h3>
+</div>
+{% endblock %}

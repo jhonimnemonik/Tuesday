@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Регистрация - Tuesday.com{% endblock %}
+
+{% block content %}
+<div class="center-content">
+  <h2>Регистрация пользователя</h2>
+  <p>Пожалуйста, введите данные для регистрации:</p>
+<div class="contact-form">
+  <form action="{{ url_for('user_routes.register') }}" method="POST">
+    <label for="username">Имя пользователя:</label><br>
+    <input type="text" id="username" name="username"><br>
+    <label for="password">Пароль:</label><br>
+    <input type="password" id="password" name="password"><br>
+    <label for="password">Повторите пароль:</label><br>
+    <input type="password" id="password2" name="password2"><br>
+    <input type="submit" value="Зарегистрироваться">
+    <a href="{{ url_for('user_routes.login') }}">Войти</a>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+  </form>
+</div>
+
+
+  {% if content %}
+    <h2>{{ content }}</h2>
+  {% endif %}
+
+{% endblock %}

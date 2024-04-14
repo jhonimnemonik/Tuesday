@@ -1,18 +1,27 @@
 import os
 
 
-class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///db/data.db'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECURITY_PASSWORD_SALT = 'your_password_salt_here'
-    SECURITY_PASSWORD_HASH = 'bcrypt'
+# class Config:
+#     SECRET_KEY = os.environ.get('SECRET_KEY')
+#     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/flask_py'
+#     MAIL_SERVER = 'smtp.googlemail.com'
+#     MAIL_PORT = 587
+#     MAIL_USE_TLS = True
+#     MAIL_USERNAME = os.environ.get('EMAIL_USER')
+#     MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
 
-    MAIL_SERVER = 'smtp.example.com'
+class Config:
+    SECRET_KEY = os.getenv("SECRET_KEY")
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECURITY_PASSWORD_SALT = ''
+    SECURITY_PASSWORD_HASH = ''
+
+    MAIL_SERVER = ''
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = 'your_email@example.com'
-    MAIL_PASSWORD = 'your_email_password'
+    MAIL_USERNAME = ''
+    MAIL_PASSWORD = ''
 
     BLACK_CONFIG = {
         'line_length': 120,
@@ -20,4 +29,4 @@ class Config:
         'exclude': '/(migrations|\.git)/'
     }
 
-print(Config.SQLALCHEMY_DATABASE_URI)
+# print(Config.SQLALCHEMY_DATABASE_URI)
