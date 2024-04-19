@@ -14,139 +14,51 @@
     {% endif %}
   {% endwith %}
 <aside id="sidebar">
-    <h2>Доски <a class="custom-link add-task-link" title="Добавить новую доску" href="#"> + </a></h2>
-
+    <h2>Доски <a class="custom-link add-task-link" title="Добавить новую доску" href="{{ url_for('todo_routes.create_board') }}"> + </a></h2>
     <button id="toggleSidebar"><</button>
     <ul>
-      <li><a href="#">Доска 1</a></li>
-      <li><a href="#">Доска 2</a></li>
-      <li><a href="#">Доска 3</a></li>
+        {% for board in boards %}
+            <li><a href="/profile/{{username}}/projects/{{ board.id }}">{{ board.name }}</a></li>
+        {% endfor %}
     </ul>
-  </aside>
-  <div class="board">
+</aside>
+<div class="board">
     <div class="column">
-      <h2><a onclick="toggleTable('plan1')" href="#">{{ board.name }}</a></h2>
-<table id="plan1">
-  <thead>
-    <tr>
-      <th>Название</th>
-      <th>Статус</th>
-      <th>Приоритет</th>
-      <th>Описание</th>
-      <th><a class="custom-link add-task-link" title="Добавить столбец" href="/add_column"> + </a></th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for task in board.tasks %}
-      <tr>
-        <td>{{ task.name }}</td>
-        <td>{{ task.status }}</td>
-        <td>{{ task.priority }}</td>
-        <td>{{ task.description }}</td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
-<!--      <h2><a onclick="toggleTable('plan1')" href="#">План</a></h2>-->
-<!--      <a class="custom-link add-task-link" title="Добавить новую задачу" href="#"> + </a>-->
-<!--      <table id="plan1">-->
-<!--        <thead>-->
-<!--          <tr>-->
-<!--            <th>Название</th>-->
-<!--            <th>Статус</th>-->
-<!--            <th>Приоритет</th>-->
-<!--            <th>Описание</th>-->
-<!--            <th><a class="custom-link add-task-link" title="Добавить столбец" href="/add_column"> + </a></th>-->
-<!--          </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--          <tr>-->
-<!--            <td>Задача 1</td>-->
-<!--            <td>В работе</td>-->
-<!--            <td>&#45;&#45;***</td>-->
-<!--            <td>Нужно сделать!</td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Задача 2</td>-->
-<!--            <td>В работе</td>-->
-<!--            <td>*****</td>-->
-<!--            <td>Очень нужно сделать!</td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Задача 3</td>-->
-<!--            <td>В работе</td>-->
-<!--            <td>&#45;&#45;&#45;&#45;*</td>-->
-<!--            <td>Можно наверное сделать!</td>-->
-<!--          </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
-<!--      <h2><a onclick="toggleTable('plan1')" href="#">В работе</a></h2>-->
-<!--      <a class="custom-link add-task-link" title="Добавить новую задачу" href="#"> + </a>-->
-<!--      <table id="plan1">-->
-<!--        <thead>-->
-<!--          <tr>-->
-<!--            <th>Название</th>-->
-<!--            <th>Статус</th>-->
-<!--            <th>Приоритет</th>-->
-<!--            <th>Описание</th>-->
-<!--            <th><a class="custom-link add-task-link" title="Добавить столбец" href="#"> + </a></th>-->
-<!--          </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--          <tr>-->
-<!--            <td>Задача 1</td>-->
-<!--            <td>В работе</td>-->
-<!--            <td>&#45;&#45;***</td>-->
-<!--            <td>Нужно сделать!</td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Задача 2</td>-->
-<!--            <td>Закончено</td>-->
-<!--            <td>*****</td>-->
-<!--            <td>Очень нужно сделать!</td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Задача 3</td>-->
-<!--            <td>Не начато</td>-->
-<!--            <td>&#45;&#45;&#45;&#45;*</td>-->
-<!--            <td>Можно наверное сделать!</td>-->
-<!--          </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
-<!--      <h2><a onclick="toggleTable('plan1')" href="#">Завершено</a></h2>-->
-<!--      <a class="custom-link add-task-link" title="Добавить новую задачу" href="#"> + </a>-->
-<!--      <table id="plan1">-->
-<!--        <thead>-->
-<!--          <tr>-->
-<!--            <th>Название</th>-->
-<!--            <th>Статус</th>-->
-<!--            <th>Приоритет</th>-->
-<!--            <th>Описание</th>-->
-<!--            <th><a class="custom-link add-task-link" title="Добавить столбец" href="#"> + </a></th>-->
-<!--          </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--          <tr>-->
-<!--            <td>Задача 1</td>-->
-<!--            <td>В работе</td>-->
-<!--            <td>&#45;&#45;***</td>-->
-<!--            <td>Нужно сделать!</td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Задача 2</td>-->
-<!--            <td>В работе</td>-->
-<!--            <td>*****</td>-->
-<!--            <td>Очень нужно сделать!</td>-->
-<!--          </tr>-->
-<!--          <tr>-->
-<!--            <td>Задача 3</td>-->
-<!--            <td>В работе</td>-->
-<!--            <td>&#45;&#45;&#45;&#45;*</td>-->
-<!--            <td>Можно наверное сделать!</td>-->
-<!--          </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
+      <h2><a onclick="toggleTable('plan1')" href="#">{{ board.name }}</a><a class="custom-link add-task-link" title="Добавить задачу" href="{{ url_for('todo_routes.create_task') }}"> + </a></h2>
 
+        <table id="plan1">
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Статус</th>
+                    <th>Приоритет</th>
+                    <th>Описание</th>
+                    {% for column in columns %}
+                        <th>{{ column.name }}</th>
+                    {% endfor %}
+                    <th><a class="custom-link add-task-link" title="Добавить столбец" href="{{ url_for('todo_routes.add_column') }}"> + </a></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for task in board.tasks %}
+                    <tr>
+                        <td>{{ task.name }}</td>
+                        <td>{{ task.status }}</td>
+                        <td>{{ task.priority }}</td>
+                        <td>{{ task.description }}</td>
+                        {% for column in columns %}
+                            <td>
+                                {% for content in task.contents %}
+                                    {% if content.column_id == column.id %}
+                                        {{ content.content }}
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-  </div>
+</div>
 {% endblock %}

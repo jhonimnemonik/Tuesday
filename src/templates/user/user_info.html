@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Информация о профиле{% endblock %}
+{% block content %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+<div class="profile center-content">
+<h2>Информация о профиле</h2><a href="{{ url_for('user_routes.edit_profile') }}">Редактировать</a>
+    <ul>
+        <li><strong>Имя пользователя:</strong> {{ user.username }}</li>
+        <li><strong>Email:</strong> {{ user.email }}</li>
+        <li><strong>Дата регистрации:</strong> {{ user.date_reg.strftime('%Y-%m-%d') }}</li>
+        <li><strong>Доски:</strong>
+            <ul>
+                {% for board in user.boards %}
+                    <li>{{ board.name }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+</div>
+{% endblock %}

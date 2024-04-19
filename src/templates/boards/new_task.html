@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Создание задачи в доске{% endblock %}
+
+{% block content %}
+<div class="center-content">
+ <div class="contact-form">
+  <h2>Create Task</h2>
+  <form method="POST" action="{{ url_for('todo_routes.create_task') }}">
+    {{ form.hidden_tag() }}
+    <div>
+      {{ form.name.label }}<br>
+      {{ form.name }}
+    </div>
+    <div>
+      {{ form.status.label }}<br>
+      {{ form.status }}
+    </div>
+    <div>
+      {{ form.priority.label }}<br>
+      {{ form.priority }}
+    </div>
+    <div>
+      {{ form.description.label }}<br>
+      {{ form.description }}
+    </div>
+    <div>
+      {{ form.board_id.label }}<br>
+      {{ form.board_id }}
+    </div>
+    <button type="submit">Create</button>
+  </form>
+{% endblock %}

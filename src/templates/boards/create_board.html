@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Создание доски{% endblock %}
+
+{% block content %}
+<div class="center-content">
+  <h2>Создание доски</h2>
+  <div class="contact-form">
+    <form method="post">
+      {{ form.hidden_tag() }}
+      <div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <label for="name">Название доски:</label>
+        <input type="text" id="name" name="name" value="{{ form.name.data }}">
+      </div>
+      <div>
+        <button type="submit">Создать доску</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -7,6 +7,7 @@ license = "GNU"
 readme = "README.md"
 packages = [
     { include = "app", from = "src/" },
+    { include = "config", from = "/" },
     { include = "controllers", from = "src/" }
     ]
 
@@ -25,6 +26,9 @@ python-dotenv = "^1.0.1"
 flask-migrate = "^4.0.7"
 flask-bcrypt = "^1.0.1"
 passlib = "^1.7.4"
+flask-wtf = "^1.2.1"
+email-validator = "^2.1.1"
+flask-socketio = "^5.3.6"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.12.1"

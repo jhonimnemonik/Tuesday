@@ -14,29 +14,44 @@
     {% endwith %}
     <h2>Профиль пользователя</h2>
     <ul>
-      <li><a href="#">Настройки</a></li>
-      <li><a href="#">Список досок</a></li>
-      <li><a href="#">Личные данные</a></li>
+      <div class="profile center-content">
+<h2>Информация о профиле</h2>
+    <ul>
+        <li><strong>Имя пользователя:</strong> {{ user.username }}</li>
+        <li><strong>Email:</strong> {{ user.email }}</li>
+        <li><strong>Дата регистрации:</strong> {{ user.date_reg.strftime('%Y-%m-%d') }}</li>
+        <li><strong>Доски:</strong>
+            <ul>
+                {% for board in user.boards %}
+                    <li><a href="/profile/{{username}}/projects/{{ board.id }}">{{ board.name }}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+   <a href="{{ url_for('user_routes.edit_profile') }}">Редактировать</a>
+</div>
     </ul>
   </aside>
   <div class="board2">
     <div class="profile">
-      <h2>Настройки</h2>
-      <p>Здесь вы можете настроить различные параметры вашего профиля и работы с сервисом.</p>
+      <h2>Моя команда</h2>
+
     </div>
     <div class="profile">
-      <h2>Список досок</h2>
+      <h2>Список досок<a class="custom-link add-task-link" title="Добавить новую доску" href="{{ url_for('todo_routes.create_board') }}"> + </a></h2>
       {% for board in user.boards %}
         <div>
-          <h3>{{ board.name }}</h3>
+          <h3><a href="/profile/{{username}}/projects/{{ board.id }}">{{ board.name }}</a></h3>
           <ul>
             {% for task in board.tasks %}
               <li>{{ task.name }}</li>
             {% endfor %}
+              {%- if user.boards==None %}
+                <li><a href="{{ url_for('todo_routes.create_board') }}" data-menu-link="{{ url_for('todo_routes.create_board') }}">Добавить доску</a></li>
+              {% endif %}
           </ul>
         </div>
       {% endfor %}
-
     </div>
     <div class="profile">
       <h2>Личные данные</h2>

@@ -7,15 +7,17 @@
   <h2>Регистрация пользователя</h2>
   <p>Пожалуйста, введите данные для регистрации:</p>
 <div class="contact-form">
-  <form action="{{ url_for('user_routes.register') }}" method="POST">
+  <form action="{{ url_for('home_routes.register') }}" method="POST">
     <label for="username">Имя пользователя:</label><br>
     <input type="text" id="username" name="username"><br>
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"><br>
     <label for="password">Пароль:</label><br>
     <input type="password" id="password" name="password"><br>
     <label for="password">Повторите пароль:</label><br>
     <input type="password" id="password2" name="password2"><br>
     <input type="submit" value="Зарегистрироваться">
-    <a href="{{ url_for('user_routes.login') }}">Войти</a>
+    <a href="{{ url_for('home_routes.login') }}">Войти</a>
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
       {% for category, message in messages %}
@@ -24,11 +26,9 @@
     {% endif %}
   {% endwith %}
   </form>
+  </div>
 </div>
-
-
   {% if content %}
     <h2>{{ content }}</h2>
   {% endif %}
-
 {% endblock %}

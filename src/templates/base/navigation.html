@@ -1,16 +1,28 @@
 <nav id="main-menu">
-      <ul>
-        {% if 'userLogged' in session %}
-        {% for m in menu %}
-        <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}" data-menu-link="{{ m.url }}">{{m.name}}</a></li>
-        {% endfor %}
-        <li><a href="/logout" data-menu-link="/logout">Выход</a></li>
-        {% else %}
-        {% for m in menu %}
-        {% if m.page != 'tasks' and m.page != 'profile' %}
-          <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}" data-menu-link="{{ m.url }}">{{m.name}}</a></li>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-      </ul>
-    </nav>
+    <ul>
+        {%- if 'userLogged' in session %}
+                {%- for m in menu %}
+                    {%- if m.page != 'home' %}
+                    <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}" data-menu-link="{{ m.url }}">{{m.name}}</a></li>
+                    {% endif -%}
+                {% endfor -%}
+
+                <li><a href="{{ url_for('home_routes.logout') }}" data-menu-link="{{ url_for('home_routes.logout') }}">Выход</a></li>
+            {%- if user.boards == None %}
+                {%- for m in menu %}
+                    {%- if m.page != 'boards' %}
+                        <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}" data-menu-link="{{ m.url }}">{{m.name}}</a></li>
+                    {% endif -%}
+                {% endfor -%}
+                <li><a href="{{ url_for('user_routes.create_board') }}" data-menu-link="{{ url_for('user_routes.create_board') }}">Добавить доску</a></li>
+                <li><a href="{{ url_for('user_routes.logout') }}" data-menu-link="{{ url_for('user_routes.logout') }}">Выход</a></li>
+            {% endif -%}
+            {% else -%}
+            {%- for m in menu %}
+                {%- if m.page != 'boards' and m.page != 'profile' %}
+                    <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}" data-menu-link="{{ m.url }}">{{m.name}}</a></li>
+                {% endif -%}
+            {% endfor -%}
+        {%- endif -%}
+    </ul>
+</nav>

@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Создание доски{% endblock %}
+
+{% block content %}
+<div class="center-content">
+  <div class="contact-form">
+  <h2>Создание нового столбца</h2>
+    <form action="{{ url_for('todo_routes.add_column') }}" method="POST">
+        <label for="column_name">Column Name:</label><br>
+        <input type="text" id="column_name" name="column_name"><br>
+        <button type="submit">Add Column</button>
+    </form>
+</div>
+</div>
+{% endblock %}
