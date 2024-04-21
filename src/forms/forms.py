@@ -21,7 +21,7 @@ def user_choices():
     return User.query
 
 
-class CreateBoardForm(FlaskForm):
+class BoardForm(FlaskForm):
     name = StringField("Название доски", validators=[DataRequired()])
     submit = SubmitField("Создать доску")
 
@@ -40,8 +40,11 @@ class TaskForm(FlaskForm):
         self.board_id.choices = [(board.id, board.name) for board in Board.query.all()]
 
 
-class UserForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    submit = SubmitField('Submit')
+class ColumnForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired(), Length(max=50)])
+    task_id = IntegerField('Task ID', validators=[DataRequired(), NumberRange(min=1)])
+
+
+class ContentForm(FlaskForm):
+    content = StringField('Содержание', validators=[DataRequired()])
+    submit = SubmitField('Добавить')

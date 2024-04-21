@@ -1,12 +1,19 @@
 {% extends 'base/base.html' %}
 
-{% block title %}Создание задачи в доске{% endblock %}
+{% block title %}Создание задачи{% endblock %}
 
 {% block content %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 <div class="center-content">
  <div class="contact-form">
   <h2>Create Task</h2>
-  <form method="POST" action="{{ url_for('todo_routes.create_task') }}">
+  <form method="POST" action="{{ url_for('todo_routes.create_task', board_id=board_id, username=username) }}">
     {{ form.hidden_tag() }}
     <div>
       {{ form.name.label }}<br>
@@ -24,10 +31,10 @@
       {{ form.description.label }}<br>
       {{ form.description }}
     </div>
-    <div>
-      {{ form.board_id.label }}<br>
-      {{ form.board_id }}
-    </div>
+<!--    <div>-->
+<!--      {-{ form.board_id.label }-}<br>-->
+<!--      {-{ form.board_id }-}-->
+<!--    </div>-->
     <button type="submit">Create</button>
   </form>
 {% endblock %}

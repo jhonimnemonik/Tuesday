@@ -8,7 +8,7 @@
                 {% endfor -%}
 
                 <li><a href="{{ url_for('home_routes.logout') }}" data-menu-link="{{ url_for('home_routes.logout') }}">Выход</a></li>
-            {%- if user.boards == None %}
+            {%- if username.boards == None %}
                 {%- for m in menu %}
                     {%- if m.page != 'boards' %}
                         <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}" data-menu-link="{{ m.url }}">{{m.name}}</a></li>

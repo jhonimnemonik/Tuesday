@@ -138,8 +138,8 @@ class Task(db.Model):
     priority = db.Column(db.SmallInteger, nullable=True)
     description = db.Column(db.Text, nullable=True)
     board_id = db.Column(db.Integer, db.ForeignKey("board.id"), nullable=False)
-    columns = db.relationship("Column", backref="task", lazy=True)
     messages = db.relationship("ChatMessage", backref="task", lazy="dynamic")
+
 
     def __init__(self, name=None, status=None, priority=None, description=None, board_id=None):
         if name is None:
@@ -163,17 +163,17 @@ class Task(db.Model):
 class Column(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    # tasks = db.relationship("Task", secondary="column_content", backref="columns")
-    task_id = db.Column(db.Integer, db.ForeignKey("task.id"), nullable=False)
-    # task = db.relationship("Task", backref=db.backref("columns", cascade="all, delete-orphan"))
+    board_id = db.Column(db.Integer, db.ForeignKey('board.id'), nullable=False)
+    board = db.relationship('Board', backref=db.backref('columns', lazy='dynamic'))
 
 
 class ColumnContent(db.Model):
     column_id = db.Column(db.Integer, db.ForeignKey("column.id"), primary_key=True)
     task_id = db.Column(db.Integer, db.ForeignKey("task.id"), primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    column = db.relationship("Column", backref="contents")
-    task = db.relationship("Task", backref="contents")
+    column = db.relationship("Column", backref=db.backref("contents", lazy="dynamic"))
+    task = db.relationship("Task", backref=db.backref("contents", lazy="dynamic"))
+
 
 class ChatMessage(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -38,7 +38,8 @@
 
     </div>
     <div class="profile">
-      <h2>Список досок<a class="custom-link add-task-link" title="Добавить новую доску" href="{{ url_for('todo_routes.create_board') }}"> + </a></h2>
+      <h2>Список досок<a class="custom-link add-task-link" title="Добавить новую доску" href="{{ url_for('todo_routes.create_board', username=username) }}"> + </a>
+</h2>
       {% for board in user.boards %}
         <div>
           <h3><a href="/profile/{{username}}/projects/{{ board.id }}">{{ board.name }}</a></h3>
