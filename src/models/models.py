@@ -17,7 +17,7 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(128), nullable=False)
     is_active = db.Column(db.Boolean, default=False)
     date_reg = db.Column(db.Date, default=datetime.utcnow)
-    boards = db.relationship("Board", backref="user", lazy=True, foreign_keys="[Board.user_id]")
+    boards = db.relationship("Board", backref="user", lazy=True, cascade="all, delete-orphan")
 
     def __init__(self, username, password, email):
         self.username = username
@@ -116,19 +116,18 @@ class Board(db.Model):
     name = db.Column(db.String(100), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     team_user_id = db.Column(db.Integer, db.ForeignKey("team_user.id"), nullable=True)
-    tasks = db.relationship("Task", backref="board", lazy=True)
+    # tasks = db.relationship("Task", backref="board", lazy=True)
+    tasks = db.relationship("Task", backref="board", lazy=True, cascade="all, delete-orphan", overlaps="board_columns,columns")
+    columns = db.relationship("Column", backref="board_columns", lazy="dynamic", cascade="all, delete-orphan", overlaps="board_columns,columns")
 
     def __init__(self, user_id, name=None, team_user_id=None):
-        if name is None:
-            last_board = Board.query.order_by(Board.id.desc()).first()
-            if last_board:
-                board_number = last_board.id + 1
-            else:
-                board_number = 1
-            name = f"Доска {board_number}"
-        self.name = name
         self.user_id = user_id
         self.team_user_id = team_user_id
+        if name is None:
+            last_board = Board.query.order_by(Board.id.desc()).first()
+            self.name = f"Доска {last_board.id + 1 if last_board else 1}"
+        else:
+            self.name = name
 
 
 class Task(db.Model):
@@ -139,6 +138,7 @@ class Task(db.Model):
     description = db.Column(db.Text, nullable=True)
     board_id = db.Column(db.Integer, db.ForeignKey("board.id"), nullable=False)
     messages = db.relationship("ChatMessage", backref="task", lazy="dynamic")
+    contents = db.relationship("ColumnContent", backref="ttask", lazy="dynamic", overlaps="ccontents,contents")
 
 
     def __init__(self, name=None, status=None, priority=None, description=None, board_id=None):
@@ -164,15 +164,17 @@ class Column(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'), nullable=False)
-    board = db.relationship('Board', backref=db.backref('columns', lazy='dynamic'))
+    board = db.relationship('Board', backref=db.backref('task_board', lazy='dynamic'), overlaps="board_columns,columns")
+    contents = db.relationship("ColumnContent", backref="ccolumn", lazy="dynamic", cascade="all, delete-orphan", overlaps="ccolumn,contents")
+
 
 
 class ColumnContent(db.Model):
     column_id = db.Column(db.Integer, db.ForeignKey("column.id"), primary_key=True)
     task_id = db.Column(db.Integer, db.ForeignKey("task.id"), primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    column = db.relationship("Column", backref=db.backref("contents", lazy="dynamic"))
-    task = db.relationship("Task", backref=db.backref("contents", lazy="dynamic"))
+    column = db.relationship("Column", backref=db.backref("ccontents", lazy="dynamic"), overlaps="ccolumn,contents")
+    task = db.relationship("Task", backref=db.backref("column_contents", lazy="dynamic"), overlaps="ccontents,contents")
 
 
 class ChatMessage(db.Model):

@@ -1,5 +1,5 @@
 from flask import Flask
-from config.config import Config
+from config import Config
 from db.db import create_db
 from flask_socketio import SocketIO
 
@@ -10,7 +10,8 @@ from flask_socketio import SocketIO
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app = Flask(__name__)
-app.config.from_object(Config)
+# app.config.from_object(Config)
+app.config.from_pyfile('config.py')
 db, migrate = create_db(app)
 socketio = SocketIO(app)
 

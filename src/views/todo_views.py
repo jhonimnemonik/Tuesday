@@ -65,7 +65,6 @@ def board_get(username, board_id):
 #     board = Board.query.get(board_id)
 #     return render_template("user/projects.html", menu=menu, page="board", board=board, username=username)
 # def projects(username):
-#     # Получите список досок из базы данных или любого другого источника данных
 #     boards = Board.query.filter_by(username=username).all()
 #     return render_template("user/projects.html", boards=boards, username=username)
 
@@ -129,6 +128,19 @@ def create_task(username, board_id):
     return render_template("boards/new_task.html",menu=menu, form=form, username=username, board_id=board_id)
 
 
+@todo_routes.route("/profile/<username>/projects/<int:board_id>/tasks/<int:task_id>/delete", methods=["POST"])
+@login_required
+def delete_task(username, board_id, task_id):
+    task = Task.query.get(task_id)
+    if not task:
+        flash("Задача не найдена.", "error")
+        return redirect(url_for("todo_routes.board", username=username, board_id=board_id))
+    db.session.delete(task)
+    db.session.commit()
+    flash("Задача успешно удалена.", "success")
+    return redirect(url_for("todo_routes.board", username=username, board_id=board_id))
+
+
 @todo_routes.route("/profile/<username>/projects/<int:board_id>/add_column", methods=["GET", "POST"])
 @login_required
 def add_column(username, board_id):
@@ -140,7 +152,7 @@ def add_column(username, board_id):
             stmt = insert(Column).values(name=column_name, board_id=board_id)
             db.session.execute(stmt)
             db.session.commit()
-            return redirect(url_for("todo_routes.board"))
+            return redirect(url_for("todo_routes.board", board_id=board_id))
         except IntegrityError as e:
             db.session.rollback()
             flash(f"An error occurred: {e}")

@@ -17,6 +17,6 @@ class Config:
     BLACK_CONFIG = {"line_length": 120, "target_version": ["py37"], "exclude": "/(migrations|\.git)/"}
 
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = 'd1f@bi4nj!p'
 SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
 SQLALCHEMY_TRACK_MODIFICATIONS = False

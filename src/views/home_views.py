@@ -51,8 +51,6 @@ def register():
         if not is_valid:
             flash(error_message, "error")
             return render_template("user/register.html", menu=menu)
-        # existing_user = User.query.filter_by(username=username).first()
-        # if existing_user:
         if User.query.filter_by(username=username).first():
             flash("Пользователь с таким именем уже существует!", "error")
             return redirect(url_for("home_routes.register", menu=menu))

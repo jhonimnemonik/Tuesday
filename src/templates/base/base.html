@@ -7,7 +7,7 @@
 <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/styles.css')}}">
 <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico')}}">
 </head>
-<body>
+<body {% block background %}{% endblock %}>
 <header {% block bluecolor %}{% endblock %}>
   <div class="header-container">
     <h1><a href="{{ url_for('home_routes.home') }}" data-menu-link="{{ url_for('home_routes.home') }}">Tuesday.com</a></h1>

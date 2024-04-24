@@ -1,0 +1,7 @@
+delete from alembic_version;
+
+
+from models.models import db
+target_metadata = db.metadata
+
+VALUES(1, 'qwerty', 'qwerty@qwe.rty', 'sPMcfxkbNQ1Fbj9V9iTlX2SSmMMa8PP3zHWWU/pSokQ=.            Ui9h+cQ5dfXWGYsQjNcn1282UDXIItrSwA0iJRyO9kA=', 0, '2024-04-19');
