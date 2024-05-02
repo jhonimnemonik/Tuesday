@@ -6,19 +6,33 @@
 
 {% block content %}
 {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
+      {% if messages %}
         {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">{{ message }}</div>
+          <div class="flash {{ category }}">{{ message }}</div>
         {% endfor %}
-    {% endif %}
-{% endwith %}
+      {% endif %}
+    {% endwith %}
 <aside id="sidebar">
     <h2>Доски <a class="custom-link add-task-link" title="Добавить новую доску" href="{{ url_for('todo_routes.create_board', board_id=board.id, username=username) }}">+</a></h2>
     <ul>
-        {% for board in boards %}
-            <li><a href="/profile/{{username}}/projects/{{ board.id }}">{{ board.name }}</a></li>
-        {% endfor %}
+        {% for board in user.boards %}
+        <div>
+          <h3><a href="/profile/{{username}}/projects/{{ board.id }}">{{ board.name }}</a></h3>
+          <ul>
+
+              {%- if user.boards==None %}
+                <li><a href="{{ url_for('todo_routes.create_board') }}" data-menu-link="{{ url_for('todo_routes.create_board') }}">Добавить доску</a></li>
+              {% endif %}
+          </ul>
+        </div>
+      {% endfor %}
     </ul>
+          <h2>Моя команда: <a class="custom-link add-task-link" title="Добавить в команду" href="{{ url_for('todo_routes.add_tuser', username=username, board_id=board_id) }}"> + </a></h2>
+<ul>
+  {% for team_user in team_users %}
+    <li>{{ team_user.username }}</li>
+  {% endfor %}
+</ul>
 </aside>
 <div class="board">
     {% if board %}
@@ -34,6 +48,7 @@
                         <th>Статус</th>
                         <th>Приоритет</th>
                         <th>Описание</th>
+                        <th>Чат</th>
                         {% for column in board.columns %}
                             <th>{{ column.name }}</th>
                         {% endfor %}
@@ -41,29 +56,34 @@
                 </thead>
                     </tr>
                 <tbody>
-                    {% for task in board.tasks %}
-                        <tr>
-                            <td>{{ task.name }}</td>
-                            <td>{{ task.status }}</td>
-                            <td>{{ task.priority }}</td>
-                            <td>{{ task.description }}</td>
-                            {% for column in board.columns %}
-                                <td>
-                                    {% set found = False %}
-                                    {% for content in task.contents %}
-                                        {% if content.column_id == column.id %}
-                                            {{ content.content }}
-                                            {% set found = true %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% if not content %}
-                                        <a class="custom-link add-task-link" title="Добавить значение." href="{{ url_for('todo_routes.add_content', board_id=board.id, task_id=task.id, column_id=column.id, username=username) }}">+</a>
-                                    {% endif %}
-                                </td>
-                            {% endfor %}
-                        </tr>
+    {% for task in board.tasks %}
+        <tr>
+            <td>{{ task.name }}</td>
+            <td>{{ task.status }}</td>
+            <td>{{ task.priority }}</td>
+            <td>{{ task.description }}</td>
+            <td><a href="{{ url_for('todo_routes.get_chat', task_id=task.id) }}">Присоединиться к чату</a></td>
+            {% for column in board.columns %}
+                <td>
+                    {% set found = False %}
+                    {% for content in task.contents %}
+                        {% if content.column_id == column.id %}
+                            {{ content.content }}
+                    {% endif %}
+                    {% else %}
+                        <a class="custom-link add-task-link" title="Добавить значение." href="{{ url_for('todo_routes.add_content', board_id=board.id, task_id=task.id, column_id=column.id, username=username) }}">+</a>
+                    {% set found = true %}
                     {% endfor %}
-                </tbody>
+                </td>
+            {% endfor %}
+            <td>
+                <form method="POST" action="{{ url_for('todo_routes.delete_task', username=username, board_id=board.id, task_id=task.id) }}">
+                    <button type="submit">Удалить</button>
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+</tbody>
             </table>
             <a class="custom-link add-task-link" title="Добавить задачу" href="{{ url_for('todo_routes.create_task', board_id=board.id, username=username) }}"> + </a>
         </div>

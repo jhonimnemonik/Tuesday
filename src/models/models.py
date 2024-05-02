@@ -6,7 +6,7 @@ from flask_login import UserMixin
 from hashlib import sha3_256
 from __main__ import app, db
 
-'''For migrate only! '''
+"""For migrate only! """
 # from app import app, db
 
 
@@ -73,18 +73,52 @@ class User(db.Model, UserMixin):
         hashed_password = f"{base64.b64encode(h_pswrd).decode('utf-8')}"
         return hashed_password
 
+    def has_access_to_board(self, board):
+        if board.user_id == self.id:
+            return True
+        team_user = TeamUser.query.filter_by(username=self.username, board_id=board.id).first()
+        if team_user:
+            return True
+        return False
+
 
 class TeamUser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     owner = db.relationship("User", backref="teams_owned", foreign_keys="[TeamUser.owner_id]")
-    username = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=True)
-    boards = db.relationship("Board", backref="team_user", lazy=True, foreign_keys="[Board.team_user_id]")
+    username = db.Column(db.Integer, db.ForeignKey("user.username"), nullable=True)
+    board_id = db.Column(db.Integer, db.ForeignKey("board.id"), nullable=False)
 
-    def __init__(self, username, owner, boards):
+    def __init__(self, username, owner, board_id):
         self.username = username
         self.owner = owner
-        self.boards = boards
+        self.board_id = board_id
+
+
+class Board(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    owner = db.relationship("User", backref="boards_owned", foreign_keys="[Board.user_id]")
+    team_users = db.relationship("TeamUser", backref="board", lazy=True, cascade="all, delete-orphan")
+    tasks = db.relationship(
+        "Task", backref="board", lazy=True, cascade="all, delete-orphan", overlaps="board_columns,columns"
+    )
+    columns = db.relationship(
+        "Column",
+        backref="board_columns",
+        lazy="dynamic",
+        cascade="all, delete-orphan",
+        overlaps="board_columns,columns",
+    )
+
+    def __init__(self, user_id, name=None):
+        self.user_id = user_id
+        if name is None:
+            last_board = Board.query.order_by(Board.id.desc()).first()
+            self.name = f"Доска {last_board.id + 1 if last_board else 1}"
+        else:
+            self.name = name
 
 
 class ContactMessage(db.Model):
@@ -111,25 +145,6 @@ class ContactMessage(db.Model):
         return True, "Сообщение отправлено."
 
 
-class Board(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    team_user_id = db.Column(db.Integer, db.ForeignKey("team_user.id"), nullable=True)
-    # tasks = db.relationship("Task", backref="board", lazy=True)
-    tasks = db.relationship("Task", backref="board", lazy=True, cascade="all, delete-orphan", overlaps="board_columns,columns")
-    columns = db.relationship("Column", backref="board_columns", lazy="dynamic", cascade="all, delete-orphan", overlaps="board_columns,columns")
-
-    def __init__(self, user_id, name=None, team_user_id=None):
-        self.user_id = user_id
-        self.team_user_id = team_user_id
-        if name is None:
-            last_board = Board.query.order_by(Board.id.desc()).first()
-            self.name = f"Доска {last_board.id + 1 if last_board else 1}"
-        else:
-            self.name = name
-
-
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -138,8 +153,7 @@ class Task(db.Model):
     description = db.Column(db.Text, nullable=True)
     board_id = db.Column(db.Integer, db.ForeignKey("board.id"), nullable=False)
     messages = db.relationship("ChatMessage", backref="task", lazy="dynamic")
-    contents = db.relationship("ColumnContent", backref="ttask", lazy="dynamic", overlaps="ccontents,contents")
-
+    contents = db.relationship("ColumnContent", backref="task_related", lazy="dynamic", cascade="all, delete-orphan")
 
     def __init__(self, name=None, status=None, priority=None, description=None, board_id=None):
         if name is None:
@@ -163,10 +177,11 @@ class Task(db.Model):
 class Column(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    board_id = db.Column(db.Integer, db.ForeignKey('board.id'), nullable=False)
-    board = db.relationship('Board', backref=db.backref('task_board', lazy='dynamic'), overlaps="board_columns,columns")
-    contents = db.relationship("ColumnContent", backref="ccolumn", lazy="dynamic", cascade="all, delete-orphan", overlaps="ccolumn,contents")
-
+    board_id = db.Column(db.Integer, db.ForeignKey("board.id"), nullable=False)
+    board = db.relationship("Board", backref=db.backref("task_board", lazy="dynamic"), overlaps="board_columns,columns")
+    contents = db.relationship(
+        "ColumnContent", backref="ccolumn", lazy="dynamic", cascade="all, delete-orphan", overlaps="ccolumn,contents"
+    )
 
 
 class ColumnContent(db.Model):
@@ -183,12 +198,14 @@ class ChatMessage(db.Model):
     sender_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     text = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    sender = db.relationship("User", foreign_keys=[sender_id])
 
     def serialize(self):
         return {
             "id": self.id,
             "task_id": self.task_id,
             "sender_id": self.sender_id,
+            "sender_name": self.sender.username,
             "text": self.text,
             "timestamp": self.timestamp.isoformat(),
         }

@@ -61,4 +61,4 @@ def register():
             flash(error_message, "success")
             return redirect(url_for("home_routes.login", menu=menu, page="home"))
 
-    return render_template("home/register.html", menu=menu, user=None)
+    return render_template("home/register.html", menu=menu, user=None, username=None)

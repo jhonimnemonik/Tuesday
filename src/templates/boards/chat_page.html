@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Чат для задачи {{ task.name }}{% endblock %}
+
+{% block content %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    <h1>Чат для задачи {{ task.name }}</h1>
+    <a href="{{ url_for('todo_routes.board', board_id=task.board_id) }}">Назад к доске</a>
+    <div id="messages">
+        {% for message in messages %}
+            <p>{{ message.sender_name }}: {{ message.text }} ({{ message.timestamp }})</p>
+        {% endfor %}
+    </div>
+    <div id="chat_container" style="">
+        <form onsubmit="sendTaskMessage({{ task.id }}); return false;">
+            <input type="text" id="chat_message_input" placeholder="Введите сообщение...">
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+{% endblock %}

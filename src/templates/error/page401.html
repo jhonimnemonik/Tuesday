@@ -15,7 +15,7 @@
 <h3>{% if 'userLogged' in session %}
     <p>Вернуться на <a href="{{ url_for('home_routes.home') }}">страницу пользователя</a>.</p>
   {% else %}
-    <p>Вернуться на <a href="{{ url_for('home_routes.home') }}">главную</a> страницу. Или <a href="{{ url_for('user_routes.register') }}">зарегистрируйтесь</a>.</p>
+    <p>Вернуться на <a href="{{ url_for('home_routes.home') }}">главную</a> страницу. Или <a href="{{ url_for('home_routes.register') }}">зарегистрируйтесь</a>.</p>
   {% endif %}
 </h3>
 </div>

@@ -18,6 +18,7 @@ class EditProfileForm(FlaskForm):
 
 def user_choices():
     from models.models import User
+
     return User.query
 
 
@@ -41,10 +42,15 @@ class TaskForm(FlaskForm):
 
 
 class ColumnForm(FlaskForm):
-    name = StringField('Name', validators=[DataRequired(), Length(max=50)])
-    task_id = IntegerField('Task ID', validators=[DataRequired(), NumberRange(min=1)])
+    name = StringField("Name", validators=[DataRequired(), Length(max=50)])
+    task_id = IntegerField("Task ID", validators=[DataRequired(), NumberRange(min=1)])
 
 
 class ContentForm(FlaskForm):
-    content = StringField('Содержание', validators=[DataRequired()])
-    submit = SubmitField('Добавить')
+    content = StringField("Содержание", validators=[DataRequired()])
+    submit = SubmitField("Добавить")
+
+
+class TeamUserForm(FlaskForm):
+    name_or_email = StringField("Name or Email", validators=[DataRequired()])
+    submit = SubmitField("Добавить в команду")

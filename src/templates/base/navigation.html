@@ -6,8 +6,14 @@
                     <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}" data-menu-link="{{ m.url }}">{{m.name}}</a></li>
                     {% endif -%}
                 {% endfor -%}
-
                 <li><a href="{{ url_for('home_routes.logout') }}" data-menu-link="{{ url_for('home_routes.logout') }}">Выход</a></li>
+        {%- if 'userLogged' not in session %}
+            {%- for m in menu %}
+                {%- if m.page != 'board' and m.page != 'profile' %}
+                    <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}" data-menu-link="{{ m.url }}">{{m.name}}</a></li>
+                {% endif -%}
+            {% endfor -%}
+        {% endif %}
             {%- if username.boards == None %}
                 {%- for m in menu %}
                     {%- if m.page != 'boards' %}
@@ -19,7 +25,7 @@
             {% endif -%}
             {% else -%}
             {%- for m in menu %}
-                {%- if m.page != 'boards' and m.page != 'profile' %}
+                {%- if m.page != 'board' and m.page != 'profile' %}
                     <li><a {% if page == m.page %}id='active'{% endif %} href="{{m.url}}" data-menu-link="{{ m.url }}">{{m.name}}</a></li>
                 {% endif -%}
             {% endfor -%}

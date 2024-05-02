@@ -1,4 +1,4 @@
-from flask import render_template, request, flash, abort, session
+from flask import render_template, flash, abort, session
 from __main__ import app, db
 from functools import wraps
 
@@ -14,43 +14,48 @@ menu = [
     {"name": "Профиль", "url": "/profile", "page": "profile"},
 ]
 
+
 @app.errorhandler(500)
-def handle_500(err):
+def handle_500(error):
     return render_template("error/page500.html", menu=menu), 500
 
 
 @app.errorhandler(401)
-def handle_401(err):
-    return render_template("error/page401.html", menu=menu), 401
+def handle_401(error):
+    return render_template("error/page401.html", menu=menu, username=session.get("userLogged")), 401
+
+
+@app.errorhandler(403)
+def handle_403(error):
+    return render_template("error/page401.html", menu=menu, username=session.get("userLogged")), 401
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    # return render_template("error/page404.html", menu=menu, user=None), 404
     return render_template("error/page404.html", menu=menu, username=session.get("userLogged")), 404
+
 
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if "userLogged" not in session:
+        if "username" in kwargs:
+            username = kwargs["username"]
+        else:
+            username = None
+
+        if "userLogged" not in session or session["userLogged"] != username:
             flash("Вы не авторизованы.", "error")
-            return abort(401)
+            abort(401)
         return f(*args, **kwargs)
+
     return decorated_function
 
-def check_request_method(*methods):
-    def decorator(f):
-        @wraps(f)
-        def decorated_function(*args, **kwargs):
-            if request.method not in methods:
-                flash("Недопустимый метод запроса.", "error")
-                return abort(405)
-            return f(*args, **kwargs)
-        return decorated_function
-    return decorator
 
 def chk_user():
-    username = session["userLogged"]
-    user = User.query.filter_by(username=username).first()
-    user_id = user.id
-    return user_id, username
+    if "userLogged" in session:
+        username = session["userLogged"]
+        user = User.query.filter_by(username=username).first()
+        user_id = user.id
+        return user_id, username, user
+    else:
+        return None, None, None

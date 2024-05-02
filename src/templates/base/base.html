@@ -11,6 +11,9 @@
 <header {% block bluecolor %}{% endblock %}>
   <div class="header-container">
     <h1><a href="{{ url_for('home_routes.home') }}" data-menu-link="{{ url_for('home_routes.home') }}">Tuesday.com</a></h1>
+    {% if username: %}
+    <h4 id="active">Пользователь {{username}}</h4>
+    {% endif %}
     <button class="menu-toggle">Меню</button>
     {% include 'base/navigation.html' %}
   </div>

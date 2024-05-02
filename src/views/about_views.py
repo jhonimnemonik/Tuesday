@@ -1,13 +1,15 @@
 from flask import render_template, request, flash, session, Blueprint
 from models.models import ContactMessage
 from sqlalchemy.sql import text
-from views import db, menu
+from views import db, menu, chk_user
 
 about_routes = Blueprint("about_routes", __name__)
 
+
 @about_routes.route("/about")
 def about():
-    return render_template("about/about.html", menu=menu, page="about")
+    username = chk_user()[0]
+    return render_template("about/about.html", menu=menu, page="about", username=username)
 
 
 @about_routes.route("/contact", methods=["GET", "POST"])
@@ -28,6 +30,7 @@ def contact():
                 db.session.commit()
                 flash(error_message, "success")
     if "userLogged" in session:
-        return render_template("about/contact.html", menu=menu, page="contact", user=session["userLogged"])
+        username = session["userLogged"]
+        return render_template("about/contact.html", menu=menu, page="contact", username=username)
     else:
         return render_template("about/contact.html", menu=menu, page="contact")

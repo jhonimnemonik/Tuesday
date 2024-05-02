@@ -34,12 +34,10 @@
   </aside>
   <div class="board2">
     <div class="profile">
-      <h2>Моя команда</h2>
 
     </div>
     <div class="profile">
-      <h2>Список досок<a class="custom-link add-task-link" title="Добавить новую доску" href="{{ url_for('todo_routes.create_board', username=username) }}"> + </a>
-</h2>
+      <h2>Список досок<a class="custom-link add-task-link" title="Добавить новую доску" href="{{ url_for('todo_routes.create_board', username=username) }}"> + </a></h2>
       {% for board in user.boards %}
         <div>
           <h3><a href="/profile/{{username}}/projects/{{ board.id }}">{{ board.name }}</a></h3>
@@ -54,9 +52,17 @@
         </div>
       {% endfor %}
     </div>
+      <div class="profile">
+      <h2>Доступные мне доски:</h2>
+        <ul>
+          {% for board in other_boards %}
+            <li>{{ board.user.username }} поделился :<a href="{{ url_for('todo_routes.shared_board', username=username, board_id=board.id) }}">{{ board.name }}</a>  </li>
+          {% endfor %}
+        </ul>
+      </div>
     <div class="profile">
       <h2>Личные данные</h2>
-      <p>Здесь вы можете просмотреть и отредактировать ваши личные данные, такие как имя, адрес электронной почты и другие.</p>
+      <p>Здесь вы можете просмотреть и отредактировать ваши личные данные,<p>такие как имя, адрес электронной почты и другие.</p>
     </div>
   </div>
 {% endblock %}
