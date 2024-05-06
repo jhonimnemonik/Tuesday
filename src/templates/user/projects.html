@@ -20,7 +20,7 @@
           <h3><a href="/profile/{{username}}/projects/{{ board.id }}">{{ board.name }}</a></h3>
           <ul>
 
-              {%- if user.boards==None %}
+              {%- if not user.boards %}
                 <li><a href="{{ url_for('todo_routes.create_board') }}" data-menu-link="{{ url_for('todo_routes.create_board') }}">Добавить доску</a></li>
               {% endif %}
           </ul>
@@ -57,32 +57,33 @@
                     </tr>
                 <tbody>
     {% for task in board.tasks %}
-        <tr>
-            <td>{{ task.name }}</td>
-            <td>{{ task.status }}</td>
-            <td>{{ task.priority }}</td>
-            <td>{{ task.description }}</td>
-            <td><a href="{{ url_for('todo_routes.get_chat', task_id=task.id) }}">Присоединиться к чату</a></td>
-            {% for column in board.columns %}
-                <td>
-                    {% set found = False %}
-                    {% for content in task.contents %}
-                        {% if content.column_id == column.id %}
-                            {{ content.content }}
-                    {% endif %}
-                    {% else %}
-                        <a class="custom-link add-task-link" title="Добавить значение." href="{{ url_for('todo_routes.add_content', board_id=board.id, task_id=task.id, column_id=column.id, username=username) }}">+</a>
-                    {% set found = true %}
-                    {% endfor %}
-                </td>
-            {% endfor %}
+    <tr>
+        <td>{{ task.name }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ task.priority }}</td>
+        <td>{{ task.description }}</td>
+        <td><a href="{{ url_for('todo_routes.get_chat', task_id=task.id) }}">Присоединиться к чату</a></td>
+        {% for column in board.columns %}
             <td>
-                <form method="POST" action="{{ url_for('todo_routes.delete_task', username=username, board_id=board.id, task_id=task.id) }}">
-                    <button type="submit">Удалить</button>
-                </form>
+                {% set found = False %}
+                {% for content in task.contents %}
+                    {% if content.column_id == column.id %}
+                        {{ content.content }}
+                        {% set found = True %}
+                    {% endif %}
+                {% endfor %}
+                {% if not found %}
+                    <a class="custom-link add-task-link" title="Добавить значение" href="{{ url_for('todo_routes.add_content', board_id=board.id, task_id=task.id, column_id=column.id, username=username) }}">+</a>
+                {% endif %}
             </td>
-        </tr>
-    {% endfor %}
+        {% endfor %}
+        <td>
+            <form method="POST" action="{{ url_for('todo_routes.delete_task', username=username, board_id=board.id, task_id=task.id) }}">
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+{% endfor %}
 </tbody>
             </table>
             <a class="custom-link add-task-link" title="Добавить задачу" href="{{ url_for('todo_routes.create_task', board_id=board.id, username=username) }}"> + </a>

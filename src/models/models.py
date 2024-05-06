@@ -152,7 +152,7 @@ class Task(db.Model):
     priority = db.Column(db.SmallInteger, nullable=True)
     description = db.Column(db.Text, nullable=True)
     board_id = db.Column(db.Integer, db.ForeignKey("board.id"), nullable=False)
-    messages = db.relationship("ChatMessage", backref="task", lazy="dynamic")
+    messages = db.relationship("ChatMessage", backref="task", lazy="dynamic", cascade="all, delete-orphan")
     contents = db.relationship("ColumnContent", backref="task_related", lazy="dynamic", cascade="all, delete-orphan")
 
     def __init__(self, name=None, status=None, priority=None, description=None, board_id=None):

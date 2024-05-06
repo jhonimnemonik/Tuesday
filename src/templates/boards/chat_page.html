@@ -11,13 +11,18 @@
       {% endif %}
     {% endwith %}
     <h1>Чат для задачи {{ task.name }}</h1>
-    <a href="{{ url_for('todo_routes.board', board_id=task.board_id) }}">Назад к доске</a>
+    <p></p>
     <div id="messages">
+        <p></p>
+    <button ><a href="{{ url_for('todo_routes.board_get', board_id=task.board_id, username=username) }}">Назад к доске</a></button>
         {% for message in messages %}
-            <p>{{ message.sender_name }}: {{ message.text }} ({{ message.timestamp }})</p>
+            <div class="message-bubble">
+                <span class="message-author">{{ message.sender.username }}</span>: {{ message.text }} <br>
+                <small>{{ message.timestamp.replace(second=0, microsecond=0) }}</small>
+            </div>
         {% endfor %}
     </div>
-    <div id="chat_container" style="">
+    <div id="chat_container">
         <form onsubmit="sendTaskMessage({{ task.id }}); return false;">
             <input type="text" id="chat_message_input" placeholder="Введите сообщение...">
             <button type="submit">Отправить</button>

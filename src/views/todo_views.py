@@ -17,7 +17,7 @@ def create_board(username):
     if request.method == "POST":
         if form.validate_on_submit():
             user = User.query.filter_by(username=username).first()
-            new_board = Board(name=form.name.data, user_id=user.id, team_user_id=None)
+            new_board = Board(name=form.name.data, user_id=user.id)
             db.session.add(new_board)
             db.session.commit()
             flash("Доска успешно создана!", "success")
@@ -126,9 +126,9 @@ def create_task(username, board_id):
 
     if request.method == "POST":
         form.board_id.data = board_id
-        print(form.validate_on_submit())
+        # print(form.validate_on_submit())
         if form.validate_on_submit():
-            print(board_id)
+            # print(board_id)
             new_task = Task(
                 name=form.name.data,
                 status=form.status.data,
@@ -173,7 +173,7 @@ def add_column(username, board_id):
             db.session.execute(stmt)
             db.session.commit()
             flash("Колонка добавлена.", "success")
-            return redirect(url_for("todo_routes.board", board_id=board_id, username=username, menu=menu))
+            return redirect(url_for("todo_routes.board_get", board_id=board_id, username=username, menu=menu))
         except IntegrityError as e:
             db.session.rollback()
             flash(f"An error occurred: {e}")
@@ -292,11 +292,11 @@ def get_chat(task_id):
 def add_chat_message(task_id):
     current_user = chk_user()[2]
     data = request.json
-    print("data", data)
+    # print("data", data)
     new_message = ChatMessage(
         task_id=task_id, sender=current_user, sender_id=current_user.id, text=data["text"], timestamp=datetime.utcnow()
     )
-    print("new_message", new_message)
+    # print("new_message", new_message)
     db.session.add(new_message)
     db.session.commit()
     return jsonify(new_message.serialize()), 201

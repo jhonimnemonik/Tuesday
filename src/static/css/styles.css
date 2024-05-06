@@ -313,8 +313,8 @@ background: #FF9C9C;
 }
 
 .contact-form a {
-  display: block; /* изменение на блочный элемент */
-  text-align: center; /* центрирование текста */
+  display: block;
+  text-align: center;
   text-decoration: none;
   width: 100%;
   background-color: #ffbb00;
@@ -323,7 +323,7 @@ background: #FF9C9C;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin-top: 5px; /* добавление отступа сверху */
+  margin-top: 5px;
 }
 
 .contact-form input[type="submit"]:hover {
@@ -384,4 +384,16 @@ background: #FF9C9C;
   .menu-open #main-menu {
     display: block;
   }
+}
+
+.message-bubble {
+background-color: #f0f0f0;
+border-radius: 15px;
+padding: 10px 20px;
+margin: 5px;
+max-width: 70%;
+word-wrap: break-word;
+}
+.message-author {
+font-weight: bold;
 }
